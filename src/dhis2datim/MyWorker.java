@@ -24,9 +24,17 @@ public class MyWorker extends SwingWorker<Integer, String>{
    
     private List<CSVLine>list;
     
+    private PropertyReader props;
+    
     public MyWorker(final JTextArea _logScreen,List _list){
         this.logScreen=_logScreen;
         this.list=_list;
+        
+        try {
+            props = new PropertyReader();
+        } catch (IOException ex) {
+            Logger.getLogger(MyWorker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
@@ -40,7 +48,9 @@ public class MyWorker extends SwingWorker<Integer, String>{
         
         FileWriter writer = null;
         try {
-            String filename=Constant.CSV_FILE_NAME;
+            //String filename=Constant.CSV_FILE_NAME;
+            
+             String filename=props.getOutputFile();
             
             //writer = new FileWriter(Constant.CSV_FILE_NAME);
             writer = new FileWriter(filename);
@@ -84,9 +94,9 @@ public class MyWorker extends SwingWorker<Integer, String>{
                      publish(obj.getDataElementUID()+","+obj.getPeriod()+","+obj.getFosa()+
                              ","+obj.getCategorieComboUID()+","+obj.getAttributeComboUID()+","+obj.getValue());
             }
-            writer.flush();
+            //writer.flush();
                 
-            writer.close();
+            //writer.close();
             
         } catch (IOException ex) {
                 Logger.getLogger(Dhis2datim.class.getName()).log(Level.SEVERE, null, ex);

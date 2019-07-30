@@ -14,8 +14,13 @@ import java.beans.PropertyChangeListener;
 import javax.swing.SwingWorker.StateValue;
 import dhis2datim.MyWorker;
 import dhis2datim.Processor;
+import dhis2datim.PropertyReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class FrmMain extends javax.swing.JFrame {
@@ -47,12 +52,12 @@ public class FrmMain extends javax.swing.JFrame {
         btnprocess = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         cbxYear = new javax.swing.JComboBox<>();
-        cbxQuarter = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cbxPeriodicity = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        lbldatafile = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
 
@@ -86,14 +91,14 @@ public class FrmMain extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9))
         );
 
         jLabel1.setFont(new java.awt.Font("Abyssinica SIL", 1, 16)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(13, 89, 205));
-        jLabel1.setText("DATIM Generator 1.0");
+        jLabel1.setText("DATIM Generator 1.1");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(192, 178, 178)));
 
@@ -112,14 +117,14 @@ public class FrmMain extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         btnprocess.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
@@ -137,10 +142,7 @@ public class FrmMain extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jLabel2.setText("Year");
-
-        jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jLabel4.setText("Quarter");
+        jLabel2.setText("Period:");
 
         jLabel3.setFont(new java.awt.Font("Abyssinica SIL", 0, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(13, 89, 205));
@@ -149,9 +151,28 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel5.setToolTipText("");
 
         jLabel6.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jLabel6.setText("Periodicity");
+        jLabel6.setText("Periodicity:");
 
         cbxPeriodicity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "QUARTER", "SEMI_ANNUAL", "ANNUAL" }));
+        cbxPeriodicity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxPeriodicityActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Data file ...");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        lbldatafile.setText("jLabel4");
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -165,37 +186,31 @@ public class FrmMain extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cbxYear, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cbxQuarter, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel6)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cbxPeriodicity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnprocess, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                            .addComponent(jLabel3))
-                        .addGap(9, 9, 9))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cbxYear, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cbxPeriodicity, 0, 121, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(btnprocess, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(68, 68, 68))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbldatafile, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23))))
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,24 +220,26 @@ public class FrmMain extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxPeriodicity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnprocess)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbxQuarter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addComponent(jLabel2)
-                        .addComponent(cbxYear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(cbxPeriodicity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)))
+                    .addComponent(btnprocess))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(cbxYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbldatafile, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -247,14 +264,19 @@ public class FrmMain extends javax.swing.JFrame {
     private void btnprocessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnprocessMouseClicked
         // TODO add your handling code here:
 
-        if (cbxYear.getSelectedItem().toString().equals("")
-                || cbxQuarter.getSelectedItem().toString().equals("")) {
+        if (cbxYear.getSelectedItem().toString().equals("")) {
             JOptionPane.showMessageDialog(null, "You should select a period");
             return;
         }
-        PERIOD = cbxYear.getSelectedItem().toString() + "Q" + cbxQuarter.getSelectedItem().toString();
+        PERIOD = cbxYear.getSelectedItem().toString();
         
         PERIODICITY=cbxPeriodicity.getSelectedItem().toString();
+        
+        try {
+            props = new PropertyReader();
+        } catch (IOException ex) {
+            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         System.out.println("STARTING DATIM GENERATOR ........");
         System.out.println();
@@ -271,27 +293,31 @@ public class FrmMain extends javax.swing.JFrame {
         //*************************
         //REMEMBER YOU DIDN'T TAKE INTO ACCOUNT THE TOTAL COLUMNS FOR HTS_TST (MUST BE DELETED OR CHANGE CODE
         //*************************
+        
         for (CategoryComboType type : CategoryComboType.values()) {
             
-            if (type.toString().equals("HTS_TST") || type.toString().equals("HTS_TST_2")
+            if(!PERIODICITY.equals("WEEKLY")){
+                if (type.toString().equals("HTS_TST") || type.toString().equals("HTS_TST_2")
                     || type.toString().equals("PMTCT_STAT")
                     || type.toString().equals("TB_STAT") || type.toString().equals("HTS_INDEX")
-                    || type.toString().equals("TX_NEW") || type.toString().equals("PMTCT_HEI_POS")
+                    ||type.toString().equals("TX_NEW") || type.toString().equals("PMTCT_HEI_POS")
                     || type.toString().equals("PMTCT_EID") || type.toString().equals("TX_CURR")
                     || type.toString().equals("PMTCT_ART") || type.toString().equals("TB_ART")
                     || type.toString().equals("TX_PVLS") || type.toString().equals("HTS_INDEX_COMM")
                     || type.toString().equals("HTS_TST_COMM")) {
 
-                processor = new Processor(type);
+                    processor = new Processor(type);
 
-                Indicateur ind = new Indicateur(type.toString());
+                    Indicateur ind = new Indicateur(type.toString());
 
-                lstData = new ArrayList<>();
+                    lstData = new ArrayList<>();
 
-                lstData = processor.processPreprocessed(ind);
+                    lstData = processor.processPreprocessed(ind,lbldatafile.getText());
 
-                fillList(lstData, ind);
+                    fillList(lstData, ind);
+                }
             }
+            
             if(PERIODICITY.equals("SEMI_ANNUAL") || PERIODICITY.equals("ANNUAL")){
                 
                 if (type.toString().equals("PP_PREV") || type.toString().equals("TB_PREV")
@@ -301,7 +327,7 @@ public class FrmMain extends javax.swing.JFrame {
 
                     Indicateur ind = new Indicateur(type.toString());
 
-                    lstData = processor.processPreprocessed(ind);
+                    lstData = processor.processPreprocessed(ind,lbldatafile.getText());
                     
                     
 
@@ -346,23 +372,51 @@ public class FrmMain extends javax.swing.JFrame {
         worker.execute();
 
     }//GEN-LAST:event_btnprocessMouseClicked
-
+    PropertyReader props;
+    
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        // TODO add your handling code here:
-        cbxYear.addItem("");
-        cbxQuarter.addItem("");
-        for (int i = 2018; i < 2025; i++) {
-            //years[i]=i+"";
-            cbxYear.addItem(i + "");
+        try {
+            // TODO add your handling code here:
+            cbxYear.addItem("");
+            for (int i = 2018; i < 2023; i++) {
+                for(int j=1; j <= 4; j++){
+                    cbxYear.addItem(i+"Q"+j);
+                }
+            }
+            props = new PropertyReader();
+            //lbldatafile.setText(props.getDataFile());
+           
+        } catch (IOException ex) {
+            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for (int i = 1; i <= 4; i++) {
-            cbxQuarter.addItem(i + "");
-        }
+        
     }//GEN-LAST:event_formWindowActivated
 
     private void btnprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnprocessActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnprocessActionPerformed
+
+    private void cbxPeriodicityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxPeriodicityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxPeriodicityActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        int res = chooser.showOpenDialog(this);
+
+        if(res == JFileChooser.APPROVE_OPTION){
+            String filename = chooser.getSelectedFile().getName();
+            String path= chooser.getSelectedFile().getAbsolutePath();
+            lbldatafile.setText(path);
+        }else{
+
+        }
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -673,12 +727,11 @@ public class FrmMain extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnprocess;
     private javax.swing.JComboBox<String> cbxPeriodicity;
-    private javax.swing.JComboBox<String> cbxQuarter;
     private javax.swing.JComboBox<String> cbxYear;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
@@ -688,6 +741,7 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    public javax.swing.JLabel lbldatafile;
     private javax.swing.JTextArea logScreen;
     private javax.swing.JProgressBar progress;
     // End of variables declaration//GEN-END:variables

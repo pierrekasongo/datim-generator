@@ -5,6 +5,10 @@
  */
 package dhis2datim;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author ebongo
@@ -21,15 +25,13 @@ public class Constant {
         System.out.println("______________________________________________________________________");
         System.out.println(" ");
     }
-    public static final String CSV_FILE_NAME="data_for_datim.csv";
-    
-    //public static final String ATTRIBUTE_COMBO="JVafaPfopJf";
+    /*public static final String CSV_FILE_NAME="..\\output\\data_for_datim.csv";
 
-    public static final String DATA_FILE_LOCATION="dhis2_data.xls";
+    public static final String DATA_FILE_LOCATION="..\\dhis2_data.xls";
     
-    public static final String OU_FILE_LOCATION="OU.xls";
+    public static final String OU_FILE_LOCATION="..\\input\\OU.xls";
     
-    public static final String METADATA_FILE_LOCATION="metadata.xls";
+    public static final String METADATA_FILE_LOCATION="..\\input\\metadata.xls";*/
     
     public static final String CATEGORIECOMBO_HTS_TAB_ID="CC_HTS_TST";
     public static final String DATAELEMENT_HTS_TAB_ID="DE_HTS_TST";

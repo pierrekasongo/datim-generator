@@ -6,11 +6,15 @@
 package dhis2datim;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import jxl.Sheet;
 import jxl.Workbook;
 
@@ -18,61 +22,38 @@ import jxl.Workbook;
  *
  * @author ebongo
  */
-public class Processor {
-    
-//    private static final String DATA_FILE_LOCATION="dhis2_data.xls";
-//    
-//    private static final String METADATA_FILE_LOCATION="metadata.xls";
-//    
-//    private static final int CATEGORIECOMBO_HTS_TAB_ID=0;
-//    
-//    
-//    
-//    private static final int CATEGORIECOMBO_PMTCT_STAT_TAB_ID=1;
-//    
-//    
-//    private static final int ORGUNIT_TAB_ID=2;
-//    
-//    private static final int DATAELEMENT_TAB_ID=3;
+public final class Processor {
     
     private static List<String> DATAELEMENTKEYS;
     
     
     private Map orgUnits,categorieCombo,dataelement;
     
-    
-    
     private CategoryComboType type;
     
-    private static Connection CNX=null; 
+    private static PropertyReader props;
     
     public Processor(CategoryComboType type){
         
-        this.orgUnits=new HashMap();
+        try {
+            this.orgUnits=new HashMap();
+            
+            this.categorieCombo=new HashMap();
+            
+            //this.type=type;
+            
+            this.dataelement=new HashMap();
+            
+            if(this.dataelement.isEmpty()|| this.categorieCombo.isEmpty() || this.orgUnits.isEmpty()){
+                this.orgUnits=loadOrgUnit();
+                this.categorieCombo=loadCategorieCombo(type);
+                this.dataelement=loadDataElement(type);
+            }
+            props = new PropertyReader();
+        } catch (IOException ex) {
+            Logger.getLogger(Processor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        this.orgUnits=loadOrgUnit();
-        
-        this.categorieCombo=new HashMap();
-        
-        this.type=type;
-        
-        this.categorieCombo=loadCategorieCombo(this.type);
-        
-//        this.categorieComboPMTCT_STAT=new HashMap();
-//        
-//        this.categorieComboPMTCT_STAT=loadCategorieCombo(CategoryComboType.PMTCT_STAT);
-        
-        this.dataelement=new HashMap();
-        
-        this.dataelement=loadDataElement(this.type);
-        
-        //Connector connector=new Connector();
-        
-//        try {
-//            this.CNX=connector.getConnection();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Processor.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
     
     
@@ -96,7 +77,7 @@ public class Processor {
        
     }
     
-    public List<DataStructureDATIM> processPreprocessed(Indicateur ind){
+    public List<DataStructureDATIM> processPreprocessed(Indicateur ind,String filename){
         Workbook workbook=null;
         
         String periode="";
@@ -107,7 +88,9 @@ public class Processor {
             
             lstData=new ArrayList<>();
             
-            workbook=Workbook.getWorkbook(new File(Constant.DATA_FILE_LOCATION));
+            //workbook=Workbook.getWorkbook(new File(Constant.DATA_FILE_LOCATION));
+            
+            workbook=Workbook.getWorkbook(new File(filename));
             
             Sheet sheet=workbook.getSheet(ind.getNom());
             
@@ -177,8 +160,7 @@ public class Processor {
                                         tranche_age, genre, valeur, numerateur,status);
                                 
                                 lstData.add(struct);
-                            }
-                            
+                            } 
                         }
                     }
                     break;
@@ -789,7 +771,8 @@ public class Processor {
         try{
                 data=new HashMap();
 
-                workbook=Workbook.getWorkbook(new File(Constant.OU_FILE_LOCATION));
+                //workbook=Workbook.getWorkbook(new File(Constant.OU_FILE_LOCATION));
+                workbook=Workbook.getWorkbook(new File(props.getOuFile()));
 
                 Sheet sheet=workbook.getSheet(Constant.ORGUNIT_TAB_ID);
 
@@ -836,11 +819,13 @@ public class Processor {
         try{
                 data=new HashMap();
 
-                workbook=Workbook.getWorkbook(new File(Constant.METADATA_FILE_LOCATION));
+                //workbook=Workbook.getWorkbook(new File(Constant.METADATA_FILE_LOCATION));
+                
+                workbook=Workbook.getWorkbook(new File(props.getMetadataFile()));
                 
                 String sheetID="";//(type.equals(CategoryComboType.OTHERS))?CATEGORIECOMBO_HTS_TAB_ID:CATEGORIECOMBO_PMTCT_STAT_TAB_ID;
                 
-                if(null!=type)switch (type) {
+               switch (type) {
                 case HTS_TST:
                 case HTS_TST_2:
                     sheetID=Constant.CATEGORIECOMBO_HTS_TAB_ID;
@@ -978,11 +963,11 @@ public class Processor {
         DATAELEMENTKEYS=new ArrayList<>();
         
         try{
-                data=new HashMap();
+                    data=new HashMap();
 
-                workbook=Workbook.getWorkbook(new File(Constant.METADATA_FILE_LOCATION));
+                //workbook=Workbook.getWorkbook(new File(Constant.METADATA_FILE_LOCATION));
+                    workbook=Workbook.getWorkbook(new File(props.getMetadataFile()));
 
-                if(null!=type)
                     switch (type) {
                         case HTS_TST:
                         case HTS_TST_2:

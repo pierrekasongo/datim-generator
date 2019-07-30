@@ -37,6 +37,8 @@ public class Dhis2datim {
     private static int count;
     
     private static String PERIOD="2018Q3";
+    
+    private static PropertyReader props;
   
     public static void main(String[] args) throws IOException, WriteException/*, BiffException, SQLException*/ {
         // TODO code application logic here      
@@ -75,7 +77,7 @@ public class Dhis2datim {
 
                 List<DataStructureDATIM>lstData = new ArrayList<>();
 
-                lstData = processor.processPreprocessed(ind);
+                lstData = processor.processPreprocessed(ind,props.getDataFile());
 
                 fillList(lstData,ind);
             }
@@ -302,8 +304,14 @@ public class Dhis2datim {
     private static void writeToCSV(){
         
         FileWriter writer = null;
+        
         try {
-            String filename=Constant.CSV_FILE_NAME;
+            
+            props = new PropertyReader();
+            
+            //String filename=Constant.CSV_FILE_NAME;
+            
+            String filename=props.getOutputFile();
             
             //writer = new FileWriter(Constant.CSV_FILE_NAME);
             writer = new FileWriter(filename);
