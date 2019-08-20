@@ -7,14 +7,12 @@ package dhis2datim;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import jxl.Sheet;
 import jxl.Workbook;
 
@@ -41,6 +39,7 @@ public final class Processor {
             this.categorieCombo=new HashMap();
             
             //this.type=type;
+            props = new PropertyReader();
             
             this.dataelement=new HashMap();
             
@@ -49,7 +48,7 @@ public final class Processor {
                 this.categorieCombo=loadCategorieCombo(type);
                 this.dataelement=loadDataElement(type);
             }
-            props = new PropertyReader();
+            
         } catch (IOException ex) {
             Logger.getLogger(Processor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -59,18 +58,18 @@ public final class Processor {
     
     public static Integer tryParseInt(String value) {
         
-        String nb="";
+        String nb = "";
         
         if(value.length() == 0)return 0;
                                         
         for (int i = 0 ; i < value.length(); i++){
 
-            char c=value.charAt(i);
+            char c = value.charAt(i);
             
             try {
                   nb+= Integer.parseInt(c+"")+"";
             } catch (NumberFormatException ex) {
-                 
+                 System.out.println(ex.getMessage());
             }                                         
         }
         return Integer.parseInt(nb);
@@ -129,31 +128,30 @@ public final class Processor {
                         
                         for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
                             
-                            String valeur="0";
+                            String valeur = "0";
                             
                             if(sheet.getCell(j,4).getContents().length() > 0 )
-                                genre=sheet.getCell(j,4).getContents();
+                                genre = sheet.getCell(j,4).getContents();
                             else
                                 genre="";
                             
                             if(sheet.getCell(j,3).getContents().length() > 0)
-                                tranche_age=sheet.getCell(j,3).getContents();
+                                tranche_age = sheet.getCell(j,3).getContents();
                             
                             if(genre.length() > 0){
                                 
                                 if(sheet.getCell(j,2).getContents().length() > 0){//Status change then it's new entry
                                             
-                                    status=sheet.getCell(j,2).getContents().trim();
+                                    status = sheet.getCell(j,2).getContents().trim();
                                     
-                                    status=status.equals("Positives")?"Positive":"Negative";
-                                            
+                                    status = status.equals("Positives")?"Positive":"Negative";                                           
                                 }
                                 if(sheet.getCell(j,1).getContents().length() > 0){
                                             
-                                            porteEntree=sheet.getCell(j,1).getContents();
+                                    porteEntree = sheet.getCell(j,1).getContents();
                                 } 
                                 if(sheet.getCell(j,i).getContents().length() > 0)
-                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                                    valeur = tryParseInt(sheet.getCell(j,i).getContents()).toString();
 
                                 //Creation d'une datastructure
                                 DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
@@ -759,6 +757,7 @@ public final class Processor {
         }catch(Exception e){
             System.out.println(e.getMessage()+". Make sure "+ind.getNom()+" file sheet exists.");
         }
+       
         return lstData;
     }
     
@@ -772,6 +771,7 @@ public final class Processor {
                 data=new HashMap();
 
                 //workbook=Workbook.getWorkbook(new File(Constant.OU_FILE_LOCATION));
+                String f = props.getOuFile();
                 workbook=Workbook.getWorkbook(new File(props.getOuFile()));
 
                 Sheet sheet=workbook.getSheet(Constant.ORGUNIT_TAB_ID);

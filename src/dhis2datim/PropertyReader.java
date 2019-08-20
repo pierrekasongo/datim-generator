@@ -27,7 +27,7 @@ public class PropertyReader {
         try {
             
             input=new FileInputStream("../resources/config.properties");
-            
+            //input=new FileInputStream("C:/Users/ebongo/Documents/iHAP/DEVELOPMENT/dhis2datim/resources/config.properties");
             prop.load(input);
             
         } catch (FileNotFoundException ex) {

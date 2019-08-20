@@ -52,24 +52,18 @@ public class MyWorker extends SwingWorker<Integer, String>{
             
              String filename=props.getOutputFile();
             
-            //writer = new FileWriter(Constant.CSV_FILE_NAME);
             writer = new FileWriter(filename);
-            
+            //writer = new FileWriter("datim.csv");
         } catch (IOException ex) {
             Logger.getLogger(Dhis2datim.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        
-
         try {
-            CSVUtils.writeLine(writer,Arrays.asList("Data element","Period","OrganisationUnit","CategoryCombo","AttributeCombo","Value"));
+            CSVUtils.writeLine(writer,Arrays.asList("DataelementID","Period","orgUnitID","categoryOptionComboID","AttributeOptionComboID","Value"));
         } catch (IOException ex) {
             Logger.getLogger(Dhis2datim.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
-            
-            
             size=list.size();
             
             int i=0;
@@ -94,9 +88,9 @@ public class MyWorker extends SwingWorker<Integer, String>{
                      publish(obj.getDataElementUID()+","+obj.getPeriod()+","+obj.getFosa()+
                              ","+obj.getCategorieComboUID()+","+obj.getAttributeComboUID()+","+obj.getValue());
             }
-            //writer.flush();
+            writer.flush();
                 
-            //writer.close();
+            writer.close();
             
         } catch (IOException ex) {
                 Logger.getLogger(Dhis2datim.class.getName()).log(Level.SEVERE, null, ex);
