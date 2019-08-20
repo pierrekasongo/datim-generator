@@ -65,7 +65,6 @@ public class MyWorker extends SwingWorker<Integer, String>{
 
         try {
             size=list.size();
-            
             int i=0;
             
             for(CSVLine obj:list){
