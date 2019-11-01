@@ -94,8 +94,8 @@ public class Constant {
     public static final String CATEGORIECOMBO_PP_PREV_TAB_ID="CC_PP_PREV";
     public static final String DATAELEMENT_PP_PREV_ID="DE_PP_PREV";
     
-    public static final String CATEGORIECOMBO_LAB_PT_CQI_TAB_ID="CC_LAB_PT_CQI";
-    public static final String DATAELEMENT_LAB_PT_CQI_ID="DE_LAB_PT_CQI";
+    public static final String CATEGORIECOMBO_LAB_PT_LAB_TAB_ID="CC_LAB_PT_CQI";
+    public static final String DATAELEMENT_LAB_PT_LAB_ID="DE_LAB_PT_CQI";
     
     public static final String CATEGORIECOMBO_HRH_CURR_TAB_ID="CC_HRH_CURR";
     public static final String DATAELEMENT_HRH_CURR_ID="DE_HRH_CURR";

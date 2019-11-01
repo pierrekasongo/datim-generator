@@ -26,7 +26,7 @@ public class PropertyReader {
         prop=new Properties();
         try {
             
-            input=new FileInputStream("../resources/config.properties");
+            input=new FileInputStream("../resources/config.properties"); /** Deploiement **/
             //input=new FileInputStream("C:/Users/ebongo/Documents/iHAP/DEVELOPMENT/dhis2datim/resources/config.properties");
             prop.load(input);
             

@@ -93,6 +93,8 @@ public final class Processor {
             
             Sheet sheet=workbook.getSheet(ind.getNom());
             
+            //Sheet sheet=workbook.getSheet("EMR_SITE");
+            
             periode="";//sheet.getCell(0,0).getContents();
             
             int countRows=sheet.getRows();
@@ -118,7 +120,7 @@ public final class Processor {
                     for(int i =5;i< countRows;i++){//Parcourir toutes les fosa
                         
                         try{
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                         }catch(Exception e){
@@ -166,7 +168,7 @@ public final class Processor {
                     for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
                         
                         try{
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().contains("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim();
                         }catch(Exception e){
@@ -289,7 +291,7 @@ public final class Processor {
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().contains("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                             
@@ -341,7 +343,7 @@ public final class Processor {
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().contains("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                             
@@ -395,7 +397,7 @@ public final class Processor {
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().contains("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                             
@@ -438,7 +440,7 @@ public final class Processor {
                     for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
                         
                         try{
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().contains("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                         }catch(Exception e){
@@ -486,7 +488,7 @@ public final class Processor {
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().contains("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                             
@@ -523,7 +525,7 @@ public final class Processor {
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().contains("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(1,i).getContents().trim()+"/"+sheet.getCell(2,i).getContents().trim();
                             
@@ -568,7 +570,7 @@ public final class Processor {
                         try{
              
                             
-                             if(sheet.getCell(0,i).getContents().equals("Total"))break;
+                             if(sheet.getCell(0,i).getContents().length() == 0)break;
                                 
                              fosa=sheet.getCell(0,i).getContents().split("/")[2].trim();
                             
@@ -579,15 +581,21 @@ public final class Processor {
                             
                         }
                                              
-                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                        for(int j=1;j < 27;j++){//Parcourir les colonnes pour chaque fosa
                             
                             String valeur="0";
                             
-                            if(sheet.getCell(j,3).getContents().length() > 0){
+                            if(sheet.getCell(j,3).getContents().length() > 0 && !sheet.getCell(j,3).getContents().toLowerCase().equals("newly")){
                                     tranche_age=sheet.getCell(j,3).getContents();
                             }else{ 
-                                tranche_age="";
-                                genre="";
+                                
+                                if(sheet.getCell(j,3).getContents().toLowerCase().equals("newly")){
+                                    tranche_age=sheet.getCell(j,3).getContents();
+                                    genre="";
+                                }else{
+                                    tranche_age="";
+                                    genre="";
+                                }
                             }
                             
                             if(sheet.getCell(j,1).getContents().length() > 0)
@@ -615,7 +623,7 @@ public final class Processor {
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().equals("Total"))break;
+                            if(sheet.getCell(0,i).getContents().equals("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                              fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                             
@@ -660,7 +668,7 @@ public final class Processor {
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().equals("Total"))break;
+                            if(sheet.getCell(0,i).getContents().equals("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                             
@@ -708,7 +716,7 @@ public final class Processor {
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().equals("Total"))break;
+                            if(sheet.getCell(0,i).getContents().equals("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
                             
                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                             
@@ -749,10 +757,277 @@ public final class Processor {
                         }
                     }
                      break;
+                     
+                //****************************
+                //ANNUAL INDICATORS
+                //****************************
+                     
+                case "PMTCT_FO":
+                    
+                    for(int i =3;i< countRows;i++){//Parcourir toutes les fosa
+                        
+                        try{
+                            
+                            if(sheet.getCell(0,i).getContents().toLowerCase().equals("total") || sheet.getCell(0,i).getContents().length() == 0)break;
+                            
+                            fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
+                            
+                        }catch(Exception e){
+                            
+                        }
+                        if(fosa.equals(""))continue;
+                        
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,2).getContents().length() > 0)
+                                    tranche_age=sheet.getCell(j,2).getContents();
+                            else tranche_age="";
+                            
+                            if(tranche_age.length() > 0 && !tranche_age.toLowerCase().equals("total")){
+                                
+                                if(sheet.getCell(j,1).getContents().length() > 0)
+                                    porteEntree=sheet.getCell(j,1).getContents();
+                                if(porteEntree.toLowerCase().equals("total"))break;
+                                
+                                if(sheet.getCell(j,i).getContents().length() > 0)
+                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                                DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                        tranche_age, genre, valeur, numerateur,status);
+                                
+                                lstData.add(struct);
+                            }else{
+                                genre="";
+                            }  
+                        }
+                    }
+                     break;
+                    case "EMR_SITE":
+                    
+                    for(int i =1;i< countRows;i++){//Parcourir toutes les fosa
+                        
+                        try{
+                            
+                            if(sheet.getCell(0,i).getContents().equals("Total") || sheet.getCell(0,i).getContents().length() == 0)break;
+                            
+                            fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
+                            
+                        }catch(Exception e){
+                            
+                        }
+                        if(fosa.equals(""))continue;
+                        
+                      
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,0).getContents().length() > 0)
+                                    tranche_age=sheet.getCell(j,0).getContents();
+                            else tranche_age="";
+                            
+                            if(tranche_age.length() > 0){
+                                
+                                porteEntree = "EMR_SITE";
+                                
+                                if(sheet.getCell(j,i).getContents().length() > 0)
+                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                                DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                        tranche_age, genre, valeur, numerateur,status);
+                                
+                                lstData.add(struct);
+                            }else{
+                                genre="";
+                            }  
+                        }
+                    }
+                     break;
+                    case "GENDER_GBV":
+                    
+                    for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
+                        
+                        try{
+                            
+                            if(sheet.getCell(0,i).getContents().toLowerCase().equals("total") || sheet.getCell(0,i).getContents().length() == 0)break;
+                            
+                            fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
+                            
+                        }catch(Exception e){
+                            
+                        }
+                        if(fosa.equals(""))continue;
+                        
+                      
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,3).getContents().length() > 0)
+                                    tranche_age=sheet.getCell(j,3).getContents();
+                            else tranche_age="";
+                            
+                            if(tranche_age.length() > 0){
+                                
+                                if(sheet.getCell(j,1).getContents().length() > 0)
+                                    porteEntree=sheet.getCell(j,1).getContents();
+                                if(porteEntree.toLowerCase().equals("total"))break;
+                                
+                                if(sheet.getCell(j,2).getContents().length() > 0)
+                                    genre=sheet.getCell(j,2).getContents();
+                                                                
+                                if(sheet.getCell(j,i).getContents().length() > 0)
+                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                                DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                        tranche_age, genre, valeur, numerateur,status);
+                                
+                                lstData.add(struct);
+                            }else{
+                                genre="";
+                            }  
+                        }
+                    }
+                     break;
+                     
+                    case "HRH_CURR":
+                    
+                    for(int i =3;i< countRows;i++){//Parcourir toutes les fosa
+                        
+                        try{
+                            
+                            if(sheet.getCell(0,i).getContents().toLowerCase().equals("total") || sheet.getCell(0,i).getContents().length() == 0)break;
+                            
+                            fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
+                            
+                        }catch(Exception e){
+                            
+                        }
+                        if(fosa.equals(""))continue;
+                        
+                      
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,2).getContents().length() > 0)
+                                    tranche_age=sheet.getCell(j,2).getContents();
+                            else tranche_age="";
+                            
+                            if(tranche_age.length() > 0){
+                                
+                                if(sheet.getCell(j,1).getContents().length() > 0)
+                                    porteEntree=sheet.getCell(j,1).getContents();
+                                if(porteEntree.toLowerCase().equals("total"))break;
+                                
+                                if(sheet.getCell(j,i).getContents().length() > 0)
+                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                                DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                        tranche_age, genre, valeur, numerateur,status);
+                                
+                                lstData.add(struct);
+                            }else{
+                                genre="";
+                            }  
+                        }
+                    }
+                     break;
+                     
+                case "LAB_PT_LAB":
+                    
+                    for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
+                        
+                        try{
+                            
+                            if(sheet.getCell(0,i).getContents().toLowerCase().equals("total") || sheet.getCell(0,i).getContents().length() == 0)break;
+                            
+                            fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
+                            
+                        }catch(Exception e){
+                            
+                        }
+                        if(fosa.equals(""))continue;
+                        
+                      
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,2).getContents().length() > 0)
+                                    tranche_age=sheet.getCell(j,2).getContents();
+                            else tranche_age="";
+                            
+                            if(tranche_age.length() > 0){
+                                
+                                if(sheet.getCell(j,1).getContents().length() > 0)
+                                    porteEntree=sheet.getCell(j,1).getContents();
+                                if(porteEntree.toLowerCase().equals("total"))break;
+
+                                if(sheet.getCell(j,i).getContents().length() > 0)
+                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                                DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                        tranche_age, genre, valeur, numerateur,status);
+                                
+                                lstData.add(struct);
+                            }else{
+                                genre="";
+                            }  
+                        }
+                    }
+                     break; 
+                     
+                    case "LAB_PT_POCT":
+                    
+                    for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
+                        
+                        try{
+                            
+                            if(sheet.getCell(0,i).getContents().toLowerCase().equals("total") || sheet.getCell(0,i).getContents().length() == 0)break;
+                            
+                            fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
+                            
+                        }catch(Exception e){
+                            
+                        }
+                        if(fosa.equals(""))continue;
+                        
+                      
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,2).getContents().length() > 0)
+                                    tranche_age=sheet.getCell(j,2).getContents();
+                            else tranche_age="";
+                            
+                            if(tranche_age.length() > 0){
+                                
+                                if(sheet.getCell(j,1).getContents().length() > 0)
+                                    porteEntree=sheet.getCell(j,1).getContents();
+                                if(porteEntree.toLowerCase().equals("total"))break;
+                                                                
+                                if(sheet.getCell(j,i).getContents().length() > 0)
+                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                                DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                        tranche_age, genre, valeur, numerateur,status);
+                                
+                                lstData.add(struct);
+                            }else{
+                                genre="";
+                            }  
+                        }
+                    }
+                     break; 
                 
                 default:
                         break;
             }
+            
               
         }catch(Exception e){
             System.out.println(e.getMessage()+". Make sure "+ind.getNom()+" file sheet exists.");
@@ -881,8 +1156,9 @@ public final class Processor {
                 case PP_PREV:
                     sheetID=Constant.CATEGORIECOMBO_PP_PREV_TAB_ID;
                     break;
-                case LAB_PT_CQI:
-                    sheetID=Constant.CATEGORIECOMBO_LAB_PT_CQI_TAB_ID;
+                case LAB_PT_LAB:
+                case LAB_PT_POCT:
+                    sheetID=Constant.CATEGORIECOMBO_LAB_PT_LAB_TAB_ID;
                     break;
                 case HRH_CURR:
                     sheetID=Constant.CATEGORIECOMBO_HRH_CURR_TAB_ID;
@@ -909,7 +1185,7 @@ public final class Processor {
 
                     String  nom=sheet.getCell(0,i).getContents();
                     
-                    if(porte.equals("HTS_TST") || porte.equals("HTS_TST_2")){
+                    if(porte.equals("HTS_TST") || porte.equals("HTS_TST_2") || porte.equals("GENDER_GBV")){
                         
                         if(nom.contains("GROUPE")){
                             groupe=nom;
@@ -1024,8 +1300,9 @@ public final class Processor {
                         case PP_PREV:
                             sheetID=Constant.DATAELEMENT_PP_PREV_ID;
                             break;
-                        case LAB_PT_CQI:
-                            sheetID=Constant.DATAELEMENT_LAB_PT_CQI_ID;
+                        case LAB_PT_LAB:
+                        case LAB_PT_POCT:
+                             sheetID=Constant.DATAELEMENT_LAB_PT_LAB_ID;
                             break;
                         case HRH_CURR:
                             sheetID=Constant.DATAELEMENT_HRH_CURR_ID;

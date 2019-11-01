@@ -98,7 +98,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Abyssinica SIL", 1, 16)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(13, 89, 205));
-        jLabel1.setText("DATIM Generator 1.1");
+        jLabel1.setText("DATIM Generator 1.2");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(192, 178, 178)));
 
@@ -329,13 +329,22 @@ public class FrmMain extends javax.swing.JFrame {
 
                     lstData = processor.processPreprocessed(ind,lbldatafile.getText());
                     
-                    
-
                     fillList(lstData, ind);
                 }
             }
             if(PERIODICITY.equals("ANNUAL")){
                 
+                if(type.toString().equals("EMR_SITE") || type.toString().equals("HRH_CURR") || 
+                        type.toString().equals("GENDER_GBV") || type.toString().equals("PMTCT_FO") ||
+                                type.toString().equals("LAB_PT_LAB")|| type.toString().equals("LAB_PT_POCT")){
+                    processor = new Processor(type);
+                    
+                    Indicateur ind = new Indicateur(type.toString());
+                    
+                    lstData = processor.processPreprocessed(ind,lbldatafile.getText());
+                    
+                    fillList(lstData, ind);
+                }
             }
         }
 
@@ -611,11 +620,8 @@ public class FrmMain extends javax.swing.JFrame {
                 //System.out.println(ds.getFosa());
                 if(ds.getGenre().contains("Unknown")){
                     
-                    if(ds.getTranche().length() == 0){
-                        
-                        categorieCombo="Newly Tested or Testing Referred";
-                    }else{
-                        
+                        //System.err.println(ds.getPorte()+ " UNKNOW");
+                    
                         if(ds.getTranche().toLowerCase().contains("military")){
                             categorieCombo="Military & Other Uniformed Services";
                         }else if(ds.getTranche().toLowerCase().contains("mobile")){
@@ -633,12 +639,11 @@ public class FrmMain extends javax.swing.JFrame {
                             categorieCombo="Non-injecting Drug Users";
                         }else if(ds.getTranche().toLowerCase().contains("others")){
                             categorieCombo="Other Priority Population Types";
-                        } 
-                    }
-                    
+                        }else if(ds.getTranche().toLowerCase().contains("newly")){
+                            categorieCombo="Newly Tested or Testing Referred";
+                    }             
                 }else{
-                    
-                    categorieCombo=ds.getTranche()+", "+ds.getGenre();
+                  categorieCombo=ds.getTranche()+", "+ds.getGenre();
                 }
             }else if(ind.getNom().equals("TX_ML")){
                 
@@ -701,7 +706,71 @@ public class FrmMain extends javax.swing.JFrame {
                     categorieCombo=ds.getTranche()+", "+ds.getGenre()+", IPT, Life-long ART, Already, Positive";
                     
                 }
+            }else if(ind.getNom().equals("PMTCT_FO")){
+                
+              
+                if(ds.getTranche().contains("FO_Nombre"))
+                    categorieCombo="default";
+                else if(ds.getTranche().contains("FO_EE Infec"))
+                    categorieCombo = "HIV-infected";
+                else if(ds.getTranche().contains("non infec"))
+                    categorieCombo = "HIV-uninfected";
+                else if(ds.getTranche().contains("FO_Status"))
+                    categorieCombo = "HIV-final status unknown";
+                else if(ds.getTranche().contains("FO_D"))
+                    categorieCombo = "Other Outcomes: Died";
+                
+            }else if(ind.getNom().equals("EMR_SITE")){
+                categorieCombo ="care and treatment";
+                
+            }else if(ind.getNom().equals("GENDER_GBV")){            
+                if(dataelement.contains("PEP"))
+                    categorieCombo=ds.getTranche()+", "+ds.getGenre()+"_GROUPE1";
+                else
+                    categorieCombo=ds.getTranche()+", "+ds.getGenre()+", Sexual Violence (Post-Rape Care)_GROUPE2";
+                
+            }else if(ind.getNom().equals("HRH_CURR")){
+                
+                String categ = "";
+                switch(ds.getTranche().trim()){
+                    case "Cliniciens":
+                        categ = "Clinical";
+                        break;
+                    case "Pharmaciens":
+                        categ = "Pharmacy";
+                        break;
+                    case "Laboratins":
+                        categ = "Laboratory";
+                        break;
+                    case "Management":
+                        categ = "Management";
+                        break;
+                    case "Service Social":
+                        categ = "Social Service";
+                        break;
+                    case "Volontaires":
+                        categ = "Lay";
+                        break;
+                    default:
+                        categ = "Other";
+                        break;
+                }
+                if(dataelement.contains("staffs par Cadre")){
+                    categorieCombo = categ;
+                }else if(dataelement.contains("staffs salari") || dataelement.contains("pour tous les salaires")){
+                    categorieCombo = categ+", Salary";
+                }else if(dataelement.contains("recevant des primes") || dataelement.contains("pour toutes les primes")){
+                    categorieCombo = categ+", Stipend";
+                }else if(dataelement.contains("recevant des des appuis")  || dataelement.contains("pour tous les appuis")){
+                    categorieCombo = categ+", Non-Monetary";
+                }
+            }else if(ind.getNom().equals("LAB_PT_LAB")){
+                categorieCombo = ds.getTranche();
+                
+            }else if(ind.getNom().equals("LAB_PT_POCT")){
+                categorieCombo = ds.getTranche();
             }
+            
             //Deal with HTS and HTS_TST sub-group
             if (ind.getNom().equals("HTS_TST") || ind.getNom().equals("HTS_TST_2")) {
 
@@ -712,14 +781,23 @@ public class FrmMain extends javax.swing.JFrame {
                 } else {//GROUPE3
                     categorieCombo += "_GROUPE3";
                 }
-
             }
-            categorieComboUID = processor.getCategorieComboByKey(categorieCombo);
+            categorieComboUID = (!ind.getNom().startsWith("LAB"))? processor.getCategorieComboByKey(categorieCombo):categorieCombo;
+            
+            String valeur ="";
+                    
+            if(ind.getNom().equals("EMR_SITE")){
+                if(ds.getValeur().equals("0"))
+                    valeur = "";
+                else valeur = "true";
+            }else{
+                valeur = ds.getValeur();
+            }
 
-            System.out.println(count + " " + dataelement + "," + dataelementUID + "," + PERIOD + "," + ds.getFosa() + "," + fosaUID + ","
-                    + categorieCombo + "," + categorieComboUID + "," + ATTRIBUTE_COMBO + "," + ds.getValeur());
+            System.out.println(count + " " + dataelement + ","+ dataelementUID + "," + PERIOD + "," + ds.getFosa() + "," + fosaUID + ","
+                    + categorieCombo + "," +ds.getTranche()+","+ categorieComboUID + "," + ATTRIBUTE_COMBO + "," + ds.getValeur());
 
-            list.add(new CSVLine(dataelementUID, PERIOD, fosaUID, categorieComboUID, ATTRIBUTE_COMBO, ds.getValeur() + ""));
+            list.add(new CSVLine(dataelementUID, PERIOD, fosaUID, categorieComboUID, ATTRIBUTE_COMBO, valeur));
         }
         System.out.println(count + " Lines added successfully!");
     }
