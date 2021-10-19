@@ -297,14 +297,7 @@ public class FrmMain extends javax.swing.JFrame {
         for (CategoryComboType type : CategoryComboType.values()) {
             
             if(PERIODICITY.equals("QUARTER")){
-                if (/*type.toString().equals("HTS_TST") || type.toString().equals("HTS_TST_2")
-                    || type.toString().equals("PMTCT_STAT")
-                    || type.toString().equals("TB_STAT") || type.toString().equals("HTS_INDEX")
-                    ||type.toString().equals("TX_NEW") || type.toString().equals("PMTCT_HEI_POS")
-                    || type.toString().equals("PMTCT_EID") || type.toString().equals("TX_CURR")
-                    || type.toString().equals("PMTCT_ART") || type.toString().equals("TB_ART")
-                    ||*/ type.toString().equals("TX_PVLS")/* || type.toString().equals("HTS_INDEX_COMM")
-                    || type.toString().equals("HTS_TST_COMM")*/) {
+                if (/*type.toString().equals("TX_PVLS")*/ type.toString().equals("GENDER_GBV")) {
 
                     processor = new Processor(type);
 
