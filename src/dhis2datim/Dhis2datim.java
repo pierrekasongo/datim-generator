@@ -134,7 +134,7 @@ public class Dhis2datim {
 
                     }else{
 
-                        categorieCombo=Processor.makeCategorieName(ds.getTranche(),ds.getGenre(),ds.getStatut());
+                        categorieCombo = Processor.makeCategorieName(ds.getTranche(),ds.getGenre(),ds.getStatut());
                     }
                 }else if(ind.getNom().equals("TX_PVLS")){
                     
