@@ -297,7 +297,8 @@ public class FrmMain extends javax.swing.JFrame {
         for (CategoryComboType type : CategoryComboType.values()) {
             
             if(PERIODICITY.equals("QUARTER")){
-                if (/*type.toString().equals("TX_PVLS")*/ type.toString().equals("GENDER_GBV")) {
+                if (type.toString().equals("TX_PVLS") || /*type.toString().equals("GENDER_GBV")*/
+                        type.toString().equals("HTS_SELF")|| type.toString().equals("HTS_SELF_FAC")) {
 
                     processor = new Processor(type);
 
@@ -775,6 +776,11 @@ public class FrmMain extends javax.swing.JFrame {
                     categorieCombo += "_GROUPE3";
                 }
             }
+            if(ind.getNom().equals("HTS_SELF") || ind.getNom().equals("HTS_SELF_FAC")){
+                
+                categorieCombo = ds.getTranche() + ", " + ds.getGenre();
+                //System.out.println(categorieCombo);
+            }
             categorieComboUID = (!ind.getNom().startsWith("LAB"))? processor.getCategorieComboByKey(categorieCombo):categorieCombo;
             
             String valeur ="";
@@ -786,9 +792,10 @@ public class FrmMain extends javax.swing.JFrame {
             }else{
                 valeur = ds.getValeur();
             }
+            
 
             System.out.println(count + " " + dataelement + ","+ dataelementUID + "," + PERIOD + "," + ds.getFosa() + "," + fosaUID + ","
-                    + categorieCombo + "," +ds.getTranche()+","+ categorieComboUID + "," + ATTRIBUTE_COMBO + "," + ds.getValeur());
+                   + categorieCombo + "," +ds.getTranche()+","+ categorieComboUID + "," + ATTRIBUTE_COMBO + "," + ds.getValeur());
 
             list.add(new CSVLine(dataelementUID, PERIOD, fosaUID, categorieComboUID, ATTRIBUTE_COMBO, valeur));
         }

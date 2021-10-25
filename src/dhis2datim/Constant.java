@@ -109,4 +109,11 @@ public class Constant {
     public static final String CATEGORIECOMBO_TX_ML_TAB_ID="CC_TX_ML";
     public static final String DATAELEMENT_TX_ML_ID="DE_TX_ML";
     
+    
+    public static final String CATEGORIECOMBO_HTS_SELF_TAB_ID="CC_HTS_SELF";
+    public static final String DATAELEMENT_HTS_SELF_ID="DE_HTS_SELF";
+    
+    public static final String CATEGORIECOMBO_HTS_SELF_FAC_TAB_ID="CC_HTS_SELF_FAC";
+    public static final String DATAELEMENT_HTS_SELF_FAC_ID="DE_HTS_SELF_FAC";
+    
 }
