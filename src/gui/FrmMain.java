@@ -297,7 +297,7 @@ public class FrmMain extends javax.swing.JFrame {
         for (CategoryComboType type : CategoryComboType.values()) {
             
             if(PERIODICITY.equals("QUARTER")){
-                if (type.toString().equals("TX_PVLS") || /*type.toString().equals("GENDER_GBV")*/
+                if (type.toString().equals("TX_PVLS") || type.toString().equals("EMR_SITE") ||
                         type.toString().equals("HTS_SELF")|| type.toString().equals("HTS_SELF_FAC")) {
 
                     processor = new Processor(type);
@@ -783,15 +783,9 @@ public class FrmMain extends javax.swing.JFrame {
             }
             categorieComboUID = (!ind.getNom().startsWith("LAB"))? processor.getCategorieComboByKey(categorieCombo):categorieCombo;
             
-            String valeur ="";
-                    
-            if(ind.getNom().equals("EMR_SITE")){
-                if(ds.getValeur().equals("0"))
-                    valeur = "";
-                else valeur = "true";
-            }else{
-                valeur = ds.getValeur();
-            }
+            String valeur = "";
+            
+            valeur = ds.getValeur();
             
 
             System.out.println(count + " " + dataelement + ","+ dataelementUID + "," + PERIOD + "," + ds.getFosa() + "," + fosaUID + ","
